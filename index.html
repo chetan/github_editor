@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="css/gfm.css">
     <style type="text/css">
       html, body { height: 100%; }
-      #preview { overflow: auto; }
+      #preview { overflow: auto; width: 100%; }
       .row-fluid { margin-left: 15px; }
       .row-fluid [class*="span"] { margin-left: 0; }
       .container-fluid { padding: 0; }
+      .col-edit { margin-right: 10px; }
     </style>
     <script type="text/javascript" src="js/showdown.js"></script>
     <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
@@ -19,8 +20,6 @@
       function layout() {
         var bh = $("body").height();
         var ct = $("#markdown")[0].offsetTop;
-        $("#markdown").width( $(".col-edit").width() - 10 );
-        $("#preview").width("100%");
         $("#markdown, #preview").height(bh-ct-15);
         editor.resize();
       }
