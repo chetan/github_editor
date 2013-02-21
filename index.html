@@ -8,25 +8,40 @@
     <style type="text/css">
       html, body { height: 100%; }
       #preview { overflow: auto; }
+      .row-fluid [class*="span"] {
+        margin-left: 0;
+      }
+      .col-preview {
+        margin-left: 35px !important;
+      }
     </style>
     <script type="text/javascript" src="js/showdown.js"></script>
     <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+    <script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
       function layout() {
         var bh = $("body").height();
-        var ct = $(".editor")[0].offsetTop;
-        $("#markdown, #preview").width("100%");
-        $("#markdown, #preview").height(bh-ct-30);
+        var ct = $("#markdown")[0].offsetTop;
+        $("#preview").width("100%");
+        $("#markdown, #preview").height(bh-ct-15);
+        editor.resize();
       }
       $(window).resize(layout);
       $(document).ready(function() {
-        layout();
         var converter = new Showdown.converter();
         var preview = $("#preview");
-        $("#markdown").keyup(function(e) {
-          var html = converter.makeHtml($(e.target).val());
-          preview.html(html);
+        // create editor
+        window.editor = ace.edit("markdown");
+        editor.setTheme("ace/theme/clouds");
+        editor.getSession().setTabSize(2);
+        editor.getSession().setUseSoftTabs(true);
+        editor.setShowPrintMargin(false);
+        editor.getSession().setMode("ace/mode/markdown");
+        editor.getSession().on('change', function(e) {
+          preview.html( converter.makeHtml(editor.getValue()) );
         });
+        editor.focus();
+        layout();
       });
     </script>
   </head>
@@ -35,13 +50,11 @@
       <div class="row-fluid">
         <div class="span6">
           <h1>edit</h1>
-          <div class="editor">
-            <textarea name="markdown" id="markdown" cols="30" rows="20"></textarea>
-          </div>
+          <div id="markdown" class="span6"></div>
         </div>
-        <div class="span6">
+        <div class="span6 col-preview">
           <h1>preview</h1>
-          <div id="preview" class="preview markdown-body"></div>
+          <div id="preview" class="span6 preview markdown-body"></div>
         </div>
       </div>
     </div>
